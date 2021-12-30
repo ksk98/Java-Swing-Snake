@@ -36,4 +36,11 @@ public abstract class TileSetManagerBase implements TileSetManager {
     public ImageIcon getObstacle() {
         return obstacles.get(random.nextInt(obstacles.size()));
     }
+
+    @Override
+    public int getTileBorderSize() {
+        if (tiles.size() > 0)
+            return tiles.get(0).getIconWidth();
+        else return 0;
+    }
 }

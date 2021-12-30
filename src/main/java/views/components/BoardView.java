@@ -1,5 +1,6 @@
-package gui.components;
+package views.components;
 
+import entities.difficulty.Difficulty;
 import managers.TileSetManager;
 
 import javax.swing.*;
@@ -12,11 +13,23 @@ public class BoardView extends JPanel {
     private JLayeredPane layers;
     private JPanel backgroundLayer, decorationLayer, collisionLayer;
 
-    public BoardView(int x, int y, TileSetManager tileSetManager) {
+    private TileSetManager tileSetManager;
+    private Difficulty difficulty;
+
+    public BoardView(int x, int y, TileSetManager tileSetManager, Difficulty difficulty) {
         this.x = x;
         this.y = y;
 
+        this.tileSetManager = tileSetManager;
+        this.difficulty = difficulty;
+
         layers = new JLayeredPane();
+        layers.setPreferredSize(
+                new Dimension(
+                        x * tileSetManager.getTileBorderSize(),
+                        y * tileSetManager.getTileBorderSize()
+                )
+        );
 
         backgroundLayer = new JPanel();
         backgroundLayer.setLayout(new GridLayout(y, x));
@@ -32,21 +45,23 @@ public class BoardView extends JPanel {
 
         add(layers);
 
-        createWithTileset(tileSetManager);
+        createWithTileset();
     }
 
-    private void createWithTileset(TileSetManager tileSetManager) {
+    private void createWithTileset() {
         Random random = new Random();
 
         for (int i = 0; i < y; i++) {
             for (int j = 0; j < x; j++) {
                 backgroundLayer.add(new JLabel(tileSetManager.getTile()));
-
                 if (random.nextInt(100) < 30)
                     decorationLayer.add(new JLabel(tileSetManager.getDecoration()));
 
-                if (random.nextInt(100) < 10)
-
+                if (random.nextInt(100) < difficulty.getObstacleChanceInPercent()) {
+                    JLabel obstacle = new JLabel(tileSetManager.getObstacle());
+                    obstacle.setText(" ");
+                    collisionLayer.add(obstacle);
+                }
             }
         }
     }
