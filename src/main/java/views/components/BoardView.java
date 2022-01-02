@@ -33,15 +33,24 @@ public class BoardView extends JPanel {
 
         backgroundLayer = new JPanel();
         backgroundLayer.setLayout(new GridLayout(y, x));
-        layers.add(backgroundLayer, 0);
+        backgroundLayer.setBounds(0, 0, x * tileSetManager.getTileBorderSize(), y * tileSetManager.getTileBorderSize());
+        layers.add(backgroundLayer);
+        layers.setLayer(backgroundLayer, 0);
 
         decorationLayer = new JPanel();
         decorationLayer.setLayout(new GridLayout(y, x));
-        layers.add(decorationLayer, 1);
+        decorationLayer.setOpaque(false);
+        decorationLayer.setBounds(0, 0, x * tileSetManager.getTileBorderSize(), y * tileSetManager.getTileBorderSize());
+
+        layers.add(decorationLayer);
+        layers.setLayer(decorationLayer, 1);
 
         collisionLayer = new JPanel();
         collisionLayer.setLayout(new GridLayout(y, x));
-        layers.add(collisionLayer, 2);
+        collisionLayer.setOpaque(false);
+        collisionLayer.setBounds(0, 0, x * tileSetManager.getTileBorderSize(), y * tileSetManager.getTileBorderSize());
+        layers.add(collisionLayer);
+        layers.setLayer(collisionLayer, 2);
 
         add(layers);
 
@@ -54,13 +63,17 @@ public class BoardView extends JPanel {
         for (int i = 0; i < y; i++) {
             for (int j = 0; j < x; j++) {
                 backgroundLayer.add(new JLabel(tileSetManager.getTile()));
-                if (random.nextInt(100) < 30)
+                if (random.nextInt(100) < 20)
                     decorationLayer.add(new JLabel(tileSetManager.getDecoration()));
+                else
+                    decorationLayer.add(new JLabel(tileSetManager.getEmpty()));
 
                 if (random.nextInt(100) < difficulty.getObstacleChanceInPercent()) {
                     JLabel obstacle = new JLabel(tileSetManager.getObstacle());
                     obstacle.setText(" ");
                     collisionLayer.add(obstacle);
+                } else {
+                    collisionLayer.add(new JLabel(tileSetManager.getEmpty()));
                 }
             }
         }

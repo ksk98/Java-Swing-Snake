@@ -7,6 +7,8 @@ import views.components.SettingPanel;
 
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 
 public class ViewSettings extends ViewBase {
     private SettingsManager settingsManager;
@@ -17,17 +19,29 @@ public class ViewSettings extends ViewBase {
         setLayout(new BoxLayout(getContentPane(), BoxLayout.Y_AXIS));
 
         SettingPanel difficultyPanel = new SettingPanel(
-                DifficultyRepo.getDifficultyNames(),
-                settingsManager.getDifficulty().getDisplayName(),
+                DifficultyRepo.getDifficulties(),
+                0,
                 "DIFFICULTY: ");
+        difficultyPanel.getSelector().addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent actionEvent) {
+                settingsManager.setDifficulty(DifficultyRepo.getDifficulty(difficultyPanel.getSelected()));
+            }
+        });
         difficultyPanel.setAlignmentX(Component.CENTER_ALIGNMENT);
         add(difficultyPanel);
 
         SettingPanel sizePanel = new SettingPanel(
                 SizeRepo.getSizeNames(),
-                settingsManager.getSize().getDisplayName(),
+                0,
                 "BOARD SIZE: "
         );
+        sizePanel.getSelector().addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent actionEvent) {
+                settingsManager.setSize(SizeRepo.getSize(sizePanel.getSelected()));
+            }
+        });
         sizePanel.setAlignmentX(Component.CENTER_ALIGNMENT);
         add(sizePanel);
 

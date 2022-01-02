@@ -21,7 +21,7 @@ public class SizeImpl implements Size {
     }
 
     @Override
-    public String getDisplayName() {
+    public String toString() {
         return name;
     }
 }

@@ -27,7 +27,7 @@ public class DifficultyImpl implements Difficulty {
     }
 
     @Override
-    public String getDisplayName() {
+    public String toString() {
         return name;
     }
 }

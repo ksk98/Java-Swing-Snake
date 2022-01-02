@@ -65,7 +65,7 @@ public class ViewManager {
     }
 
     private void createGame() {
-        Size size = settingsManager.getSize();
+        Size size = settingsManager.getBoardSize();
         ViewGame game = new ViewGame(
                 size.getX(), size.getY(),
                 settingsManager.getTileSetManager(),

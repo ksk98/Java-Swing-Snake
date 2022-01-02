@@ -15,14 +15,15 @@ public class DesertTileSetManager extends TileSetManagerBase {
         File folder = new File(folderURL.toURI());
 
         for (String path: Objects.requireNonNull(folder.list())) {
+            String finalPath = folder.getAbsolutePath() + "\\" + path;
             if (path.startsWith("sand_base"))
-                tiles.add(new ImageIcon(path));
+                tiles.add(createScaledIcon(new ImageIcon(finalPath)));
             else if (path.startsWith("sand_deco"))
-                decorations.add(new ImageIcon(path));
+                decorations.add(createScaledIcon(new ImageIcon(finalPath)));
             else if (path.startsWith("sand_obst"))
-                obstacles.add(new ImageIcon(path));
+                obstacles.add(createScaledIcon(new ImageIcon(finalPath)));
             else if (path.startsWith("sand_treasure"))
-                treasures.add(new ImageIcon(path));
+                treasures.add(createScaledIcon(new ImageIcon(finalPath)));
         }
     }
 }

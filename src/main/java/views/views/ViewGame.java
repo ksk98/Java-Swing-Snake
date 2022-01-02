@@ -8,17 +8,17 @@ import managers.TileSetManager;
 import javax.swing.*;
 
 public class ViewGame extends ViewBase {
-    private BoardPanel boardPanel;
     private BoardView boardView;
+    private BoardPanel boardPanel;
 
     public ViewGame(int x, int y, TileSetManager tileSetManager, Difficulty difficulty) {
-        setLayout(new BoxLayout(getContentPane(), BoxLayout.X_AXIS));
+        setLayout(new BoxLayout(getContentPane(), BoxLayout.Y_AXIS));
 
-        boardPanel = new BoardPanel();
         boardView = new BoardView(x, y, tileSetManager, difficulty);
+        boardPanel = new BoardPanel();
 
-        add(boardPanel);
         add(boardView);
+        add(boardPanel);
 
         revalidate();
         pack();

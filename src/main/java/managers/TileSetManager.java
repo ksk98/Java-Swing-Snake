@@ -7,5 +7,7 @@ public interface TileSetManager {
     ImageIcon getDecoration();
     ImageIcon getTreasure();
     ImageIcon getObstacle();
+    ImageIcon getEmpty();
+    ImageIcon getTest();
     int getTileBorderSize();
 }
