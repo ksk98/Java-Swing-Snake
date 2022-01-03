@@ -1,4 +1,4 @@
-package entities.size;
+package entities.data.size;
 
 public class SizeImpl implements Size {
     private int x, y;

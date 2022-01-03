@@ -1,33 +1,27 @@
-package managers;
+package managers.Tiles;
+
+import utility.ImageIconUtility;
 
 import javax.swing.*;
-import java.awt.*;
-import java.net.URISyntaxException;
 import java.net.URL;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Random;
 
-public abstract class TileSetManagerBase implements TileSetManager {
+public abstract class TileSetBase implements TileSet {
     protected final List<ImageIcon> tiles, decorations, treasures, obstacles;
     protected final ImageIcon empty, test;
     private Random random;
 
-    public TileSetManagerBase() throws URISyntaxException {
+    public TileSetBase() {
         tiles = new LinkedList<>();
         decorations = new LinkedList<>();
         treasures = new LinkedList<>();
         obstacles = new LinkedList<>();
         URL folderURL = ClassLoader.getSystemResource("sprites/");
-        empty = createScaledIcon(new ImageIcon(folderURL.getPath() + "nothing.png"));
-        test = createScaledIcon(new ImageIcon(folderURL.getPath() + "test.png"));
+        empty = ImageIconUtility.createScaledIcon(new ImageIcon(folderURL.getPath() + "nothing.png"));
+        test = ImageIconUtility.createScaledIcon(new ImageIcon(folderURL.getPath() + "test.png"));
         random = new Random();
-    }
-
-    public ImageIcon createScaledIcon(ImageIcon icon) {
-        Image image = icon.getImage();
-        Image newImage = image.getScaledInstance(64, 64,  java.awt.Image.SCALE_SMOOTH);
-        return new ImageIcon(newImage);
     }
 
     @Override

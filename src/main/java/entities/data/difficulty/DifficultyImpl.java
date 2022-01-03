@@ -1,12 +1,12 @@
-package entities.difficulty;
+package entities.data.difficulty;
 
 public class DifficultyImpl implements Difficulty {
-    private int obstacleChanceInPercent, speed, pointMultiplier;
+    private int obstacleChanceInPercent, frameDelay, pointMultiplier;
     private String name;
 
-    public DifficultyImpl(int obstacleChanceInPercent, int speed, int pointMultiplier, String name) {
+    public DifficultyImpl(int obstacleChanceInPercent, int frameDelayMS, int pointMultiplier, String name) {
         this.obstacleChanceInPercent = obstacleChanceInPercent;
-        this.speed = speed;
+        this.frameDelay = frameDelayMS;
         this.pointMultiplier = pointMultiplier;
         this.name = name;
     }
@@ -17,8 +17,8 @@ public class DifficultyImpl implements Difficulty {
     }
 
     @Override
-    public int getSpeed() {
-        return speed;
+    public int getFrameDelay() {
+        return frameDelay;
     }
 
     @Override

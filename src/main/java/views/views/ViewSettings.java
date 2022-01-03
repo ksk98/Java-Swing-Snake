@@ -1,7 +1,7 @@
 package views.views;
 
-import entities.difficulty.DifficultyRepo;
-import entities.size.SizeRepo;
+import entities.data.difficulty.DifficultyRepo;
+import entities.data.size.SizeRepo;
 import managers.SettingsManager;
 import views.components.SettingPanel;
 
@@ -53,6 +53,7 @@ public class ViewSettings extends ViewBase {
 
         revalidate();
         pack();
+        centerScreen();
     }
 
     public JButton getGoBack() {

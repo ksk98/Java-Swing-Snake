@@ -1,4 +1,4 @@
-package entities.difficulty;
+package entities.data.difficulty;
 
 import java.util.HashMap;
 import java.util.LinkedList;
@@ -42,11 +42,11 @@ public abstract class DifficultyRepo {
     private static void initialise() {
         difficulties = new HashMap<>();
         order = new LinkedList<>();
-        difficulties.put(DifficultyLevel.EASY, new DifficultyImpl(0, 1, 1, "EASY"));
+        difficulties.put(DifficultyLevel.EASY, new DifficultyImpl(0, 800, 1, "EASY"));
         order.add(DifficultyLevel.EASY);
-        difficulties.put(DifficultyLevel.MEDIUM, new DifficultyImpl(4, 2, 2, "MEDIUM"));
+        difficulties.put(DifficultyLevel.MEDIUM, new DifficultyImpl(4, 600, 2, "MEDIUM"));
         order.add(DifficultyLevel.MEDIUM);
-        difficulties.put(DifficultyLevel.HARD, new DifficultyImpl(8, 3, 3, "HARD"));
+        difficulties.put(DifficultyLevel.HARD, new DifficultyImpl(8, 400, 3, "HARD"));
         order.add(DifficultyLevel.HARD);
     }
 }

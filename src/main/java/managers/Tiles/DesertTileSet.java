@@ -1,4 +1,6 @@
-package managers;
+package managers.Tiles;
+
+import utility.ImageIconUtility;
 
 import javax.swing.*;
 import java.io.File;
@@ -6,9 +8,9 @@ import java.net.URISyntaxException;
 import java.net.URL;
 import java.util.Objects;
 
-public class DesertTileSetManager extends TileSetManagerBase {
+public class DesertTileSet extends TileSetBase {
 
-    public DesertTileSetManager() throws URISyntaxException {
+    public DesertTileSet() throws URISyntaxException {
         super();
 
         URL folderURL = ClassLoader.getSystemResource("sprites/sand");
@@ -17,13 +19,13 @@ public class DesertTileSetManager extends TileSetManagerBase {
         for (String path: Objects.requireNonNull(folder.list())) {
             String finalPath = folder.getAbsolutePath() + "\\" + path;
             if (path.startsWith("sand_base"))
-                tiles.add(createScaledIcon(new ImageIcon(finalPath)));
+                tiles.add(ImageIconUtility.createScaledIcon(new ImageIcon(finalPath)));
             else if (path.startsWith("sand_deco"))
-                decorations.add(createScaledIcon(new ImageIcon(finalPath)));
+                decorations.add(ImageIconUtility.createScaledIcon(new ImageIcon(finalPath)));
             else if (path.startsWith("sand_obst"))
-                obstacles.add(createScaledIcon(new ImageIcon(finalPath)));
+                obstacles.add(ImageIconUtility.createScaledIcon(new ImageIcon(finalPath)));
             else if (path.startsWith("sand_treasure"))
-                treasures.add(createScaledIcon(new ImageIcon(finalPath)));
+                treasures.add(ImageIconUtility.createScaledIcon(new ImageIcon(finalPath)));
         }
     }
 }

@@ -1,8 +1,8 @@
-package managers;
+package managers.Tiles;
 
 import javax.swing.*;
 
-public interface TileSetManager {
+public interface TileSet {
     ImageIcon getTile();
     ImageIcon getDecoration();
     ImageIcon getTreasure();

@@ -23,6 +23,7 @@ public class ViewMenu extends ViewBase {
         create();
         revalidate();
         pack();
+        centerScreen();
     }
 
     private void create() throws URISyntaxException {

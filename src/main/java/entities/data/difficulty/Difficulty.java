@@ -1,8 +1,8 @@
-package entities.difficulty;
+package entities.data.difficulty;
 
 public interface Difficulty {
     int getObstacleChanceInPercent();
-    int getSpeed();
+    int getFrameDelay();
     int getPointMultiplier();
     String toString();
 }

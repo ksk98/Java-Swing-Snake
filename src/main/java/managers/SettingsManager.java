@@ -1,25 +1,29 @@
 package managers;
 
-import entities.difficulty.Difficulty;
-import entities.difficulty.DifficultyRepo;
-import entities.size.Size;
-import entities.size.SizeRepo;
-import entities.size.BoardSize;
-import entities.difficulty.DifficultyLevel;
+import entities.data.difficulty.Difficulty;
+import entities.data.difficulty.DifficultyRepo;
+import entities.data.size.Size;
+import entities.data.size.SizeRepo;
+import entities.data.size.BoardSize;
+import entities.data.difficulty.DifficultyLevel;
+import managers.Body.BodySet;
+import managers.Body.RegularBodySet;
+import managers.Tiles.DesertTileSet;
+import managers.Tiles.TileSet;
 
 import java.net.URISyntaxException;
 
-public class SettingsManager {
+public class SettingsManager implements SettingsGetter {
     private Difficulty difficulty;
-
     private Size size;
-
-    private TileSetManager tileSetManager;
+    private TileSet tileSet;
+    private BodySet bodySet;
 
     public SettingsManager() throws URISyntaxException {
         difficulty = DifficultyRepo.getDifficulty(DifficultyLevel.EASY);
         size = SizeRepo.getSize(BoardSize.SMALL);
-        tileSetManager = new DesertTileSetManager();
+        tileSet = new DesertTileSet();
+        bodySet = new RegularBodySet();
     }
 
     public void setDifficulty(DifficultyLevel difficultyLevel) {
@@ -30,14 +34,6 @@ public class SettingsManager {
         this.difficulty = difficulty;
     }
 
-    public Difficulty getDifficulty() {
-        return difficulty;
-    }
-
-    public TileSetManager getTileSetManager() {
-        return tileSetManager;
-    }
-
     public void setSize(BoardSize boardSize) {
         size = SizeRepo.getSize(boardSize);
     }
@@ -46,6 +42,22 @@ public class SettingsManager {
         this.size = size;
     }
 
+    @Override
+    public Difficulty getDifficulty() {
+        return difficulty;
+    }
+
+    @Override
+    public TileSet getTileSet() {
+        return tileSet;
+    }
+
+    @Override
+    public BodySet getBodySet() {
+        return bodySet;
+    }
+
+    @Override
     public Size getBoardSize() {
         return size;
     }

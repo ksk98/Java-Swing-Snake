@@ -1,4 +1,4 @@
-package entities.difficulty;
+package entities.data.difficulty;
 
 public enum DifficultyLevel {
     EASY("EASY"),

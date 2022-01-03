@@ -1,4 +1,4 @@
-package entities.size;
+package entities.data.size;
 
 import java.util.HashMap;
 import java.util.LinkedList;
@@ -46,7 +46,7 @@ public abstract class SizeRepo {
         order.add(BoardSize.SMALL);
         sizes.put(BoardSize.MEDIUM, new SizeImpl(24, 12, "MEDIUM"));
         order.add(BoardSize.MEDIUM);
-        sizes.put(BoardSize.LARGE, new SizeImpl(32, 16, "LARGE"));
+        sizes.put(BoardSize.LARGE, new SizeImpl(28, 14, "LARGE"));
         order.add(BoardSize.LARGE);
     }
 }

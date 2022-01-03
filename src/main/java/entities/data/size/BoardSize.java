@@ -1,4 +1,4 @@
-package entities.size;
+package entities.data.size;
 
 public enum BoardSize {
     SMALL("SMALL"),
