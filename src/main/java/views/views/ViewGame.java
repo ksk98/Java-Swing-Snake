@@ -26,6 +26,7 @@ public class ViewGame extends ViewBase {
         revalidate();
         pack();
         centerScreen();
+        setFocusable(true);
     }
 
     public BoardPanel getBoardPanel() {

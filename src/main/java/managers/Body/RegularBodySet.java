@@ -18,7 +18,7 @@ public class RegularBodySet extends BodySetBase {
 
         for (String path: Objects.requireNonNull(folder.list())) {
             String finalPath = folder.getAbsolutePath() + "\\" + path;
-            if (path.startsWith("head"))
+            if (path.startsWith("head_straight"))
                 this.head = (ImageIconUtility.createScaledIcon(new ImageIcon(finalPath)));
             else if (path.startsWith("head_left"))
                 this.headLeft = (ImageIconUtility.createScaledIcon(new ImageIcon(finalPath)));

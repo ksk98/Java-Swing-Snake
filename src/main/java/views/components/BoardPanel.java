@@ -32,6 +32,7 @@ public class BoardPanel extends JPanel implements TimerOutput, ScoreOutput {
         int tenSeconds = Math.floorDiv(timeInSeconds, 10) % 6;
         int seconds = timeInSeconds % 10;
         this.time.setText("TIME: " + tenMinutes + minutes + ":" + tenSeconds + seconds);
+        revalidate();
     }
 
     @Override

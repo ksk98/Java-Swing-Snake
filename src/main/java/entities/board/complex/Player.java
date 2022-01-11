@@ -21,7 +21,7 @@ public class Player {
     }
 
     public Player(Coordinate headCoordinate, BodySet bodySet, Direction startDirection) {
-        head = new BaseDrawable(bodySet.getHead(), headCoordinate);
+        head = new BaseDrawable(bodySet.getHead(), headCoordinate, startDirection);
 
         Coordinate tailCoordinate = new Coordinate(headCoordinate);
         Coordinate tailPreviousCoordinate = new Coordinate(headCoordinate);
@@ -35,15 +35,15 @@ public class Player {
                 tailPreviousCoordinate.y -= 2;
                 break;
             case left:
-                tailCoordinate.x -=1;
-                tailPreviousCoordinate.x -= 2;
-                break;
-            case right:
                 tailCoordinate.x += 1;
                 tailPreviousCoordinate.x += 2;
                 break;
+            case right:
+                tailCoordinate.x -= 1;
+                tailPreviousCoordinate.x -= 2;
+                break;
         }
-        tail = new BaseDrawable(bodySet.getTail(), tailCoordinate);
+        tail = new BaseDrawable(bodySet.getTail(), tailCoordinate, startDirection);
         headPrevious = new BaseDrawable(tail);
         tailPrevious = new BaseDrawable(bodySet.getTail(), tailPreviousCoordinate, startDirection);
         body = new ArrayDeque<>();
@@ -54,12 +54,12 @@ public class Player {
         last = new BaseDrawable(head);
     }
 
-    public void updateBody(){
-        //Update the tails previous position
+    public void updateBody() {
+        // Update the tails previous position
         tailPrevious.setCoordinate(tail);
 
-        //Player consists only of the head and the tail.
-        if(length == 0){
+        // Player consists only of the head and the tail.
+        if (length == 0) {
             tail.setPosition(headPrevious.getCoordinate(), head.getDirection());
 
             first.setPosition(tail);
@@ -69,8 +69,8 @@ public class Player {
             return;
         }
 
-        //Player consists of head, tail and one segment
-        if(length == 1){
+        // Player consists of head, tail and one segment
+        if (length == 1) {
             tail.setPosition(first.getCoordinate(), headPrevious.getDirection());
 
             first.setPosition(headPrevious);
@@ -80,8 +80,8 @@ public class Player {
             return;
         }
 
-        //Player consists of head, tail and two segments
-        if(length == 2){
+        // Player consists of head, tail and two segments
+        if (length == 2) {
             tail.setPosition(last.getCoordinate(), first.getDirection());
 
             second.setPosition(first);
@@ -91,8 +91,8 @@ public class Player {
             return;
         }
 
-        //Player is fully developed and doesn't contain any extra segments
-        if(length == 3){
+        // Player is fully developed and doesn't contain any extra segments
+        if (length == 3) {
             tail.setPosition(last.getCoordinate(), second.getDirection());
 
             last.setPosition(second);
@@ -102,7 +102,7 @@ public class Player {
             return;
         }
 
-        //Player is fully developed and the body queue is now used
+        // Player is fully developed and the body queue is now used
         Drawable fromQueue = body.remove();
 
         tail.setCoordinate(last.getCoordinate());
@@ -118,14 +118,14 @@ public class Player {
     /**
      * Updates the player heads old position and orientation.
      */
-    public void updateHeadPrev(){
+    public void updateHeadPrev() {
         headPrevious.setPosition(head);
     }
 
     /**
      * Makes the player longer by adding an extra segment.
      */
-    public void addSegment(){
+    public void addSegment() {
         Drawable newSegment = new BaseDrawable(head);
         length++;
 

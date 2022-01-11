@@ -89,23 +89,23 @@ public class BoardView extends JPanel {
             throw new IndexOutOfBoundsException(
                     "Attempted to access invalid field of coordinates (" + x + ", " + y + ")."
             );
-        JLabel field = ((JLabel) collisionLayer.getComponent( (y * boardY) + x));
+        JLabel field = ((JLabel) collisionLayer.getComponent( (y * boardX) + x));
         return field.getToolTipText().equals(" ");
     }
 
     public void draw(int x, int y, ImageIcon imageIcon, Direction direction, boolean collides){
-        if(x >= boardX || x < 0 || y >= boardY || y < 0)
+        if (x >= boardX || x < 0 || y >= boardY || y < 0)
             throw new IndexOutOfBoundsException("Attempted to draw out of bound: " + x + ", " + y + ".");
 
-        if(imageIcon == null)
+        if (imageIcon == null)
             return;
 
-        //Unless the direction specified equals Direction.up, we need to flip the icon
+        // Unless the direction specified equals Direction.up, we need to flip the icon
         ImageIcon finalIcon;
-        if(direction == Direction.up)
+        if (direction == Direction.up)
             finalIcon = imageIcon;
-        else{
-            //Convert given ImageIcon to BufferedImage
+        else {
+            // Convert given ImageIcon to BufferedImage
             BufferedImage image = new BufferedImage(
                     imageIcon.getIconWidth(),
                     imageIcon.getIconHeight(),
@@ -132,11 +132,12 @@ public class BoardView extends JPanel {
             finalIcon = new ImageIcon(rotatedImage);
         }
 
-        ((JLabel)collisionLayer.getComponentAt(x, y)).setIcon(finalIcon);
+        JLabel field = ((JLabel)collisionLayer.getComponent((y * boardX) + x));
+        field.setIcon(finalIcon);
         if (collides)
-            ((JLabel)collisionLayer.getComponentAt(x, y)).setToolTipText(" ");
+            field.setToolTipText(" ");
         else
-            ((JLabel)collisionLayer.getComponentAt(x, y)).setToolTipText("");
+            field.setToolTipText("");
     }
 
     public void draw(int x, int y, ImageIcon imageIcon, boolean collides) {

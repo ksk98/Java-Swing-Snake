@@ -1,14 +1,12 @@
 package managers;
 
+import concurrents.GameThread;
 import entities.data.size.Size;
-import logic.Game;
 import views.views.ViewGame;
 import views.views.ViewMenu;
 import views.views.ViewSettings;
 
 import javax.swing.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.awt.event.ComponentAdapter;
 import java.awt.event.ComponentEvent;
 import java.net.URISyntaxException;
@@ -20,6 +18,7 @@ public class ViewManager {
     private HashMap<View, JFrame> views;
     private View current = View.MENU;
     private SettingsManager settingsManager;
+    private GameThread gameThread;
 
 
     public ViewManager(SettingsManager settingsManager) throws URISyntaxException {
@@ -37,8 +36,8 @@ public class ViewManager {
     private void createMenu() throws URISyntaxException {
         ViewMenu menu = new ViewMenu();
         menu.getPlay().addActionListener(actionEvent -> {
-            changeViewTo(View.GAME);
             createGame();
+            changeViewTo(View.GAME);
         });
         menu.getSettings().addActionListener(actionEvent -> changeViewTo(View.SETTINGS));
         menu.getProfile().addActionListener(actionEvent -> changeViewTo(View.PROFILE));
@@ -60,22 +59,18 @@ public class ViewManager {
             @Override
             public void componentShown(ComponentEvent e) {
                 JOptionPane.showMessageDialog(game, "Press ok to start");
+                gameThread = new GameThread(game, settingsManager);
+                gameThread.start();
                 game.startTimer();
-                try {
-                    Game gameInstance = new Game(game.getBoardView(), game.getBoardPanel(), settingsManager);
-                } catch (InterruptedException ex) {
-                    ex.printStackTrace();
-                }
             }
         });
 
-        game.getExitButton().addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent actionEvent) {
-                game.stopTimer();
-                changeViewTo(View.MENU);
-                views.remove(View.GAME);
-            }
+        game.getExitButton().addActionListener(actionEvent -> {
+            game.stopTimer();
+            changeViewTo(View.MENU);
+            views.remove(View.GAME);
+            gameThread.abort();
+            gameThread = null;
         });
 
         views.put(View.GAME, game);
@@ -84,12 +79,7 @@ public class ViewManager {
 
     private void createSettings() {
         ViewSettings settings = new ViewSettings(settingsManager);
-        settings.getGoBack().addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent actionEvent) {
-                changeViewTo(View.MENU);
-            }
-        });
+        settings.getGoBack().addActionListener(actionEvent -> changeViewTo(View.MENU));
 
         views.put(View.SETTINGS, settings);
         settings.setVisible(false);

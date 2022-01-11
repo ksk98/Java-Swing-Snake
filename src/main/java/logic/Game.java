@@ -8,6 +8,7 @@ import enums.Direction;
 import managers.SettingsGetter;
 import views.components.BoardPanel;
 import views.components.BoardView;
+import views.views.ViewGame;
 
 import javax.swing.*;
 import java.awt.event.KeyEvent;
@@ -15,11 +16,12 @@ import java.awt.event.KeyListener;
 import java.util.Random;
 
 public class Game {
-    private static BoardView window;
-    private static BoardPanel panel;
-    private static SettingsGetter settingsGetter;
+    private JFrame frame;
+    private BoardView window;
+    private BoardPanel panel;
+    private SettingsGetter settingsGetter;
 
-    private int score = 0, timeInSeconds = 0;
+    private int score = 0;
 
     //Coin
     private Coordinate coin;
@@ -32,18 +34,19 @@ public class Game {
     private boolean dirChanged;
     private Direction newDirection = Direction.left;
 
-    private boolean game = true;
+    public boolean isRunning = true;
     private TimerThread timer;
 
-    public Game(BoardView boardView, BoardPanel boardPanel,
+    public Game(ViewGame frame, BoardView boardView, BoardPanel boardPanel,
                 SettingsGetter settings) throws InterruptedException {
+        this.frame = frame;
         window = boardView;
         panel = boardPanel;
         settingsGetter = settings;
         timer = new TimerThread(settingsGetter.getDifficulty().getFrameDelay());
 
         //Add key listeners for the controls
-        window.addKeyListener(new KeyListener() {
+        frame.addKeyListener(new KeyListener() {
             @Override
             public void keyTyped(KeyEvent keyEvent) {}
 
@@ -52,11 +55,11 @@ public class Game {
                 Direction newDir = null;
                 boolean changeDir = true;
 
-                if(keyEvent.getKeyCode() == KeyEvent.VK_UP){
+                if (keyEvent.getKeyCode() == KeyEvent.VK_UP) {
                     newDir = Direction.up;
-                } else if(keyEvent.getKeyCode() == KeyEvent.VK_RIGHT){
+                } else if(keyEvent.getKeyCode() == KeyEvent.VK_RIGHT) {
                     newDir = Direction.right;
-                } else if(keyEvent.getKeyCode() == KeyEvent.VK_DOWN){
+                } else if(keyEvent.getKeyCode() == KeyEvent.VK_DOWN) {
                     newDir = Direction.down;
                 } else if(keyEvent.getKeyCode() == KeyEvent.VK_LEFT) {
                     newDir = Direction.left;
@@ -65,7 +68,7 @@ public class Game {
                 }
 
                 //If the direction was changed and player is not trying to go backwards then change the players direction
-                if(changeDir && isValidDirection(newDir)){
+                if (changeDir && isValidDirection(newDir)) {
                     newDirection = newDir;
                     dirChanged = true;
                 }
@@ -74,51 +77,48 @@ public class Game {
             @Override
             public void keyReleased(KeyEvent keyEvent) {}
         });
+    }
 
+    public void start() throws InterruptedException {
         player = new Player(new Coordinate(
                 settingsGetter.getBoardSize().getX() /2,
-                settings.getBoardSize().getY() /2),
-                settings.getBodySet());
+                settingsGetter.getBoardSize().getY() /2),
+                settingsGetter.getBodySet());
 
         drawNewCoin();
 
-        while(game){
-            //Draw player
-            try{
-                if(collisionDetected()) {
-                    game = false;
+        while (isRunning) {
+            try {
+                if (collisionDetected()) {
+                    isRunning = false;
                     break;
                 }
 
                 timer.start();
 
-                //Erase the players old tail
                 Drawable tailPrev = player.getTailPrevious();
                 window.erase(tailPrev.getCoordinate().x, tailPrev.getCoordinate().y);
 
-                //Draw the player
                 drawPlayer();
-            } catch (ArrayIndexOutOfBoundsException e){
-                //If the player is out of bounds then the game is over
-                game = false;
+            } catch (ArrayIndexOutOfBoundsException e) {
+                isRunning = false;
                 break;
             }
 
-            //Reset the booleans
             dirChanged = false;
             coinCollected = false;
 
-            //Check if player got the coin
-            if(player.getHead().getCoordinate().equals(coin))
+            if (player.getHead().getCoordinate().equals(coin))
                 collectCoin();
 
-            //Move the player
             movePlayer();
 
-            //Delay between the next frame. Wait for the timer OR for player to press an arrow.
-            //If the player holds the arrow then the game will speed up
-            while(!timer.timePassed() && !dirChanged){
-                Thread.sleep(100);
+            while (!timer.timePassed() && !dirChanged) {
+                for (int i = 0; i < 10; i++) {
+                    Thread.sleep(10);
+                    if (dirChanged)
+                        break;
+                }
             }
         }
     }
@@ -126,13 +126,13 @@ public class Game {
     /**
      * Draws a new coin in a random, unoccupied position. \n
      */
-    private void drawNewCoin(){
+    private void drawNewCoin() {
         //Generate a new place for the coin. If the coordinates are occupied, roll again
         int x, y;
-        do{
+        do {
             x = rand.nextInt(settingsGetter.getBoardSize().getX());
             y = rand.nextInt(settingsGetter.getBoardSize().getY());
-        } while(window.isOccupied(x,  y));
+        } while (window.isOccupied(x,  y));
 
         //Draw coin on screen. occupy = false tells us that the coin will not cause collision thus end the game
         window.draw(x, y, settingsGetter.getTileSet().getTreasure(), false);
@@ -144,41 +144,23 @@ public class Game {
     /**
      * Handles everything that happens when the player touches the coin, including drawing a new coin.
      */
-    private void collectCoin(){
+    private void collectCoin() {
         coinCollected = true;
-
-        //Make player longer
         player.addSegment();
-
-        //Call the coin drawing method
         drawNewCoin();
-
-        //Update score
         score += 10;
         panel.setScore(score);
-        return;
     }
 
-    /**
-     * Tells if position of the players head is already occupied with another body segment.\n
-     * @return true if the player hit himself.
-     */
-    private boolean collisionDetected(){
-        if(window.isOccupied(player.getHead().getCoordinate().x, player.getHead().getCoordinate().y))
-            return true;
-        return false;
+    private boolean collisionDetected() {
+        return window.isOccupied(player.getHead().getCoordinate().x, player.getHead().getCoordinate().y);
     }
 
-    /**
-     * Move player in the direction specified by newDirection variable. \n
-     * The method changes the position of the head, updates its old position and calls for body update
-     * if a coin was not collected.
-     */
-    private void movePlayer(){
+    private void movePlayer() {
         Drawable head = player.getHead();
         int newHeadX = head.getCoordinate().x, newHeadY = head.getCoordinate().y;
         //Move head
-        switch(newDirection){
+        switch (newDirection) {
             case up:
                 newHeadY -= 1;
                 break;
@@ -192,33 +174,30 @@ public class Game {
                 newHeadX -= 1;
                 break;
         }
+
         player.updateHeadPrev();
         head.setPosition(new Coordinate(newHeadX, newHeadY), newDirection);
 
-        if(!coinCollected)
+        if (!coinCollected)
             player.updateBody();
     }
 
-    /**
-     * Draws player on screen.
-     * This is done by drawing only the head, tail and the body segment closest to the head, if it exists.
-     */
-    private void drawPlayer(){
-        //In the old place of the head draw a body segment (if exists)
-        Direction bodyDir = Direction.up;
+    private void drawPlayer() {
+        // In the old place of the head draw a body segment (if exists)
+        Direction bodyDir;
         ImageIcon currentBodyIcon = settingsGetter.getBodySet().getBody();
 
-        if(player.getLength() > 0) {
+        if (player.getLength() > 0) {
             if (player.getHead().getCoordinate().y == player.getSecond().getCoordinate().y) {
-                //If the head and the refSegment are on the same Y coord, draw straight horizontal body
+                // If the head and the refSegment are on the same Y coordinate, draw straight horizontal body
                 bodyDir = Direction.left;
             } else {
-                //If the head and the refSegment are on the same X coord, draw straight vertical body
+                // If the head and the refSegment are on the same X coordinate, draw straight vertical body
                 if (player.getHead().getCoordinate().x == player.getSecond().getCoordinate().x) {
                     bodyDir = Direction.up;
                 } else {
-                    //Draw curved body. The orientation depends on the position of head and second body fragment closest
-                    //to the head (which can be the tail). It also depends on the orientation of the curved segment itself.
+                    // Draw curved body. The orientation depends on the position of head and second body fragment closest
+                    // to the head (which can be the tail). It also depends on the orientation of the curved segment itself.
                     currentBodyIcon = settingsGetter.getBodySet().getCurvedBody();
                     if (player.getHead().getCoordinate().y < player.getSecond().getCoordinate().y) {
                         if (player.getHead().getCoordinate().x < player.getSecond().getCoordinate().x) {
@@ -248,37 +227,32 @@ public class Game {
                 }
             }
 
-            //Draw the segment closest to the head
+            // Draw the segment closest to the head
             window.draw(player.getFirst().getCoordinate().x, player.getFirst().getCoordinate().y, currentBodyIcon, bodyDir, true);
         }
-        //Draw tail
+        // Draw tail
         window.draw(player.getTail().getCoordinate().x, player.getTail().getCoordinate().y,
                 settingsGetter.getBodySet().getTail(), player.getTail().getDirection(), true);
 
-        //Draw head
+        // Draw head
         window.draw(player.getHead().getCoordinate().x, player.getHead().getCoordinate().y,
                 settingsGetter.getBodySet().getHead(), player.getHead().getDirection(), true);
     }
 
-    /**
-     * Tells if the player can move in the given direction at the moment.
-     * @param dir the direction thats being checked.
-     * @return false if player tries to go backwards, inside own body. Otherwise returns true.
-     */
-    private boolean isValidDirection(Direction dir){
+    private boolean isValidDirection(Direction dir) {
         Direction playerDir = player.getHead().getDirection();
-        switch(playerDir){
+        switch (playerDir) {
             case up:
-                if(dir == Direction.down) return false;
+                if (dir == Direction.down) return false;
                 break;
             case right:
-                if(dir == Direction.left) return false;
+                if (dir == Direction.left) return false;
                 break;
             case down:
-                if(dir == Direction.up) return false;
+                if (dir == Direction.up) return false;
                 break;
             case left:
-                if(dir == Direction.right) return false;
+                if (dir == Direction.right) return false;
                 break;
             default:
                 return false;

@@ -17,6 +17,7 @@ dependencies {
     testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine:5.7.0'
     implementation name: 'ormlite-core-6.1'
     implementation name: 'ormlite-jdbc-6.1'
+    implementation name: 'sqlite-jdbc-3.36.0.3'
 }
 
 test {
