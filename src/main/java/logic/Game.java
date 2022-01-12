@@ -100,7 +100,7 @@ public class Game {
                 window.erase(tailPrev.getCoordinate().x, tailPrev.getCoordinate().y);
 
                 drawPlayer();
-            } catch (ArrayIndexOutOfBoundsException e) {
+            } catch (IndexOutOfBoundsException e) {
                 isRunning = false;
                 break;
             }
@@ -121,6 +121,10 @@ public class Game {
                 }
             }
         }
+    }
+
+    public int getScore() {
+        return score;
     }
 
     /**

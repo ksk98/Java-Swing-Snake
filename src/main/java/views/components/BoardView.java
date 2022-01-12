@@ -71,6 +71,7 @@ public class BoardView extends JPanel {
                     decorationLayer.add(new JLabel(tileSet.getEmpty()));
 
                 if ((i != 0 && i != boardY -1 && j != 0 && j != boardX -1) &&
+                        (i < (boardY/2)-2 && i > (boardY/2)+2 && j < (boardX/2) && j > (boardX/2)) &&
                         (random.nextInt(100) < difficulty.getObstacleChanceInPercent())) {
                     JLabel obstacle = new JLabel(tileSet.getObstacle());
                     obstacle.setToolTipText(" ");

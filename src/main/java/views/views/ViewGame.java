@@ -48,4 +48,8 @@ public class ViewGame extends ViewBase {
     public void stopTimer() {
         timer.stopRunning();
     }
+
+    public TimeCounterThread getTimer() {
+        return timer;
+    }
 }

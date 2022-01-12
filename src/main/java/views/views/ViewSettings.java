@@ -3,6 +3,7 @@ package views.views;
 import entities.data.difficulty.DifficultyRepo;
 import entities.data.size.SizeRepo;
 import managers.SettingsManager;
+import managers.Tiles.TileSetRepo;
 import views.components.SettingPanel;
 
 import javax.swing.*;
@@ -22,12 +23,7 @@ public class ViewSettings extends ViewBase {
                 DifficultyRepo.getDifficulties(),
                 0,
                 "DIFFICULTY: ");
-        difficultyPanel.getSelector().addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent actionEvent) {
-                settingsManager.setDifficulty(DifficultyRepo.getDifficulty(difficultyPanel.getSelected()));
-            }
-        });
+        difficultyPanel.getSelector().addActionListener(actionEvent -> settingsManager.setDifficulty(DifficultyRepo.getDifficulty(difficultyPanel.getSelected())));
         difficultyPanel.setAlignmentX(Component.CENTER_ALIGNMENT);
         add(difficultyPanel);
 
@@ -36,16 +32,18 @@ public class ViewSettings extends ViewBase {
                 0,
                 "BOARD SIZE: "
         );
-        sizePanel.getSelector().addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent actionEvent) {
-                settingsManager.setSize(SizeRepo.getSize(sizePanel.getSelected()));
-            }
-        });
+        sizePanel.getSelector().addActionListener(actionEvent -> settingsManager.setSize(SizeRepo.getSize(sizePanel.getSelected())));
         sizePanel.setAlignmentX(Component.CENTER_ALIGNMENT);
         add(sizePanel);
 
-        // TODO: other tile sets?
+        SettingPanel tileSetPanel = new SettingPanel(
+                TileSetRepo.getInstance().getSets(),
+                0,
+                "TILE SET: "
+        );
+        tileSetPanel.getSelector().addActionListener(actionEvent -> settingsManager.setTileSet(TileSetRepo.getInstance().getTileSet(tileSetPanel.getSelected())));
+        tileSetPanel.setAlignmentX(Component.CENTER_ALIGNMENT);
+        add(tileSetPanel);
 
         goBack = new JButton("BACK");
         goBack.setAlignmentX(Component.LEFT_ALIGNMENT);

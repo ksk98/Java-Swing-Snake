@@ -42,6 +42,10 @@ public class SettingsManager implements SettingsGetter {
         this.size = size;
     }
 
+    public void setTileSet(TileSet tileSet) {
+        this.tileSet = tileSet;
+    }
+
     @Override
     public Difficulty getDifficulty() {
         return difficulty;
