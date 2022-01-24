@@ -2,7 +2,6 @@ package views.views;
 
 import javax.swing.*;
 import java.awt.*;
-import java.net.URISyntaxException;
 import java.net.URL;
 
 public class ViewMenu extends ViewBase {
@@ -53,7 +52,7 @@ public class ViewMenu extends ViewBase {
         return settings;
     }
 
-    public JButton getHighscores() {
+    public JButton getHighScores() {
         return highscores;
     }
 

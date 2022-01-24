@@ -23,7 +23,6 @@ public class Game {
 
     private int score = 0;
 
-    //Coin
     private Coordinate coin;
     private boolean coinCollected = false;
 
@@ -45,7 +44,6 @@ public class Game {
         settingsGetter = settings;
         timer = new TimerThread(settingsGetter.getDifficulty().getFrameDelay());
 
-        //Add key listeners for the controls
         frame.addKeyListener(new KeyListener() {
             @Override
             public void keyTyped(KeyEvent keyEvent) {}
@@ -67,7 +65,6 @@ public class Game {
                     changeDir = false;
                 }
 
-                //If the direction was changed and player is not trying to go backwards then change the players direction
                 if (changeDir && isValidDirection(newDir)) {
                     newDirection = newDir;
                     dirChanged = true;
@@ -127,27 +124,18 @@ public class Game {
         return score;
     }
 
-    /**
-     * Draws a new coin in a random, unoccupied position. \n
-     */
     private void drawNewCoin() {
-        //Generate a new place for the coin. If the coordinates are occupied, roll again
         int x, y;
         do {
             x = rand.nextInt(settingsGetter.getBoardSize().getX());
             y = rand.nextInt(settingsGetter.getBoardSize().getY());
         } while (window.isOccupied(x,  y));
 
-        //Draw coin on screen. occupy = false tells us that the coin will not cause collision thus end the game
         window.draw(x, y, settingsGetter.getTileSet().getTreasure(), false);
 
-        //Update the coins coordinates
         coin = new Coordinate(x, y);
     }
 
-    /**
-     * Handles everything that happens when the player touches the coin, including drawing a new coin.
-     */
     private void collectCoin() {
         coinCollected = true;
         player.addSegment();
@@ -163,7 +151,7 @@ public class Game {
     private void movePlayer() {
         Drawable head = player.getHead();
         int newHeadX = head.getCoordinate().x, newHeadY = head.getCoordinate().y;
-        //Move head
+
         switch (newDirection) {
             case up:
                 newHeadY -= 1;
@@ -187,7 +175,6 @@ public class Game {
     }
 
     private void drawPlayer() {
-        // In the old place of the head draw a body segment (if exists)
         Direction bodyDir;
         ImageIcon currentBodyIcon = settingsGetter.getBodySet().getBody();
 
@@ -234,11 +221,9 @@ public class Game {
             // Draw the segment closest to the head
             window.draw(player.getFirst().getCoordinate().x, player.getFirst().getCoordinate().y, currentBodyIcon, bodyDir, true);
         }
-        // Draw tail
         window.draw(player.getTail().getCoordinate().x, player.getTail().getCoordinate().y,
                 settingsGetter.getBodySet().getTail(), player.getTail().getDirection(), true);
 
-        // Draw head
         window.draw(player.getHead().getCoordinate().x, player.getHead().getCoordinate().y,
                 settingsGetter.getBodySet().getHead(), player.getHead().getDirection(), true);
     }

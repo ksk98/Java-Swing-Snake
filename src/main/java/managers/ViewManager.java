@@ -33,14 +33,14 @@ public class ViewManager {
         createSettings();
     }
 
-    private void createMenu(){
+    private void createMenu() {
         ViewMenu menu = new ViewMenu();
         menu.getPlay().addActionListener(actionEvent -> {
             createGame();
             changeViewTo(View.GAME);
         });
         menu.getSettings().addActionListener(actionEvent -> changeViewTo(View.SETTINGS));
-        menu.getHighscores().addActionListener(actionEvent -> {
+        menu.getHighScores().addActionListener(actionEvent -> {
             try {
                 createHighScores();
             } catch (SQLException e) {

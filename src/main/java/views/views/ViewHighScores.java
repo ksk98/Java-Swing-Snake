@@ -7,7 +7,6 @@ import views.components.ScoreEntry;
 import javax.swing.*;
 import java.awt.*;
 import java.sql.SQLException;
-import java.util.LinkedList;
 import java.util.List;
 
 public class ViewHighScores extends ViewBase {

@@ -8,7 +8,6 @@ public class ScoreEntry extends JPanel {
     private static final int maxNameLength = 24;
 
     public ScoreEntry(String name, int score) {
-//        setPreferredSize(new Dimension(128, 32));
 
         setLayout(new BorderLayout());
         setAlignmentX(CENTER_ALIGNMENT);
@@ -17,11 +16,9 @@ public class ScoreEntry extends JPanel {
 
         JLabel labelName = new JLabel(getNameOfProperSize(name));
         labelName.setBorder(border);
-//        add(labelName, BorderLayout.WEST);
 
         JLabel labelScore = new JLabel(Integer.toString(score));
         labelScore.setBorder(border);
-//        add(labelScore, BorderLayout.EAST);
 
         JSplitPane splitPane = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT, labelName, labelScore);
         splitPane.setDividerLocation(200);

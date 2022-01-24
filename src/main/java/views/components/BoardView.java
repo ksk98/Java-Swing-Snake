@@ -70,9 +70,7 @@ public class BoardView extends JPanel {
                 else
                     decorationLayer.add(new JLabel(tileSet.getEmpty()));
 
-                if ((i != 0 && i != boardY -1 && j != 0 && j != boardX -1) &&
-                        (i < (boardY/2)-2 && i > (boardY/2)+2 && j < (boardX/2) && j > (boardX/2)) &&
-                        (random.nextInt(100) < difficulty.getObstacleChanceInPercent())) {
+                if (!isObstacleNearby(j, i) && i != boardY/2 && random.nextInt(100) < difficulty.getObstacleChanceInPercent()) {
                     JLabel obstacle = new JLabel(tileSet.getObstacle());
                     obstacle.setToolTipText(" ");
                     collisionLayer.add(obstacle);
@@ -83,6 +81,22 @@ public class BoardView extends JPanel {
                 }
             }
         }
+    }
+
+    public boolean isObstacleNearby(int x, int y) {
+        for (int i = y-2; i < y+3; i++) {
+            for (int j = x-2; j < x+3; j++) {
+                if (j < 0 || i < 0 || j >= boardX || i >= boardY)
+                    continue;
+
+                try {
+                    if (isOccupied(j, i))
+                        return true;
+                } catch (ArrayIndexOutOfBoundsException ignored) {}
+            }
+        }
+
+        return false;
     }
 
     public boolean isOccupied(int x, int y) {
@@ -101,12 +115,10 @@ public class BoardView extends JPanel {
         if (imageIcon == null)
             return;
 
-        // Unless the direction specified equals Direction.up, we need to flip the icon
         ImageIcon finalIcon;
         if (direction == Direction.up)
             finalIcon = imageIcon;
         else {
-            // Convert given ImageIcon to BufferedImage
             BufferedImage image = new BufferedImage(
                     imageIcon.getIconWidth(),
                     imageIcon.getIconHeight(),
@@ -116,7 +128,6 @@ public class BoardView extends JPanel {
             imageIcon.paintIcon(null, g, 0,0);
             g.dispose();
 
-            //Flip the BufferedImage
             double rads = Math.toRadians(90*direction.ordinal());
             double sin = Math.abs(Math.sin(rads));
             double cos = Math.abs(Math.cos(rads));

@@ -44,9 +44,9 @@ public abstract class DifficultyRepo {
         order = new LinkedList<>();
         difficulties.put(DifficultyLevel.EASY, new DifficultyImpl(0, 800, 1, "EASY"));
         order.add(DifficultyLevel.EASY);
-        difficulties.put(DifficultyLevel.MEDIUM, new DifficultyImpl(4, 600, 2, "MEDIUM"));
+        difficulties.put(DifficultyLevel.MEDIUM, new DifficultyImpl(10, 600, 2, "MEDIUM"));
         order.add(DifficultyLevel.MEDIUM);
-        difficulties.put(DifficultyLevel.HARD, new DifficultyImpl(8, 400, 3, "HARD"));
+        difficulties.put(DifficultyLevel.HARD, new DifficultyImpl(20, 400, 3, "HARD"));
         order.add(DifficultyLevel.HARD);
     }
 }
